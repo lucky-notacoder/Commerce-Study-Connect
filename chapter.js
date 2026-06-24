@@ -73,15 +73,35 @@
     return [];
   };
 
-  const renderTopicSubpoints = (subpoints) => {
+  const renderNestedPoint = (point, level = 0) => {
+    if (typeof point === "string") {
+      return `<li>${escapeHtml(point)}</li>`;
+    }
+
+    const title = getTopicTitle(point);
+    const subpoints = getTopicSubpoints(point, {}, 0);
+
+    if (!title) {
+      return "";
+    }
+
+    return `
+      <li>
+        <span class="chapter-topic-title">${escapeHtml(title)}</span>
+        ${renderTopicSubpoints(subpoints, level + 1)}
+      </li>
+    `;
+  };
+
+  const renderTopicSubpoints = (subpoints, level = 0) => {
     if (!Array.isArray(subpoints) || !subpoints.length) {
       return "";
     }
 
     return `
-      <ul class="chapter-topic-subpoints">
+      <ul class="chapter-topic-subpoints" data-level="${level}">
         ${subpoints
-          .map((subpoint) => `<li>${escapeHtml(subpoint)}</li>`)
+          .map((subpoint) => renderNestedPoint(subpoint, level))
           .join("")}
       </ul>
     `;

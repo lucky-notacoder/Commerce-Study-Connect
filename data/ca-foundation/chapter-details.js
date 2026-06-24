@@ -8,12 +8,53 @@ window.caFoundationChapterDetails = {
         {
           title: "Meaning and scope of accounting",
           subpoints: [
-            "Meaning",
-            "Accounting concepts and conventions",
-            "Accounting standards and policies",
-            "Capital and revenue items",
-          ],
+            {
+                title: "Meaning of accounting",
+                subpoints: [
+                    "Accounting is the art of recording, classifying, and summarising in a significant manner and in terms of money, transactions and events which are, in part at least, of a financial character, and interpreting the result thereof",
+                ]
+            },
+            {
+                title: "Scope of accounting",
+                subpoints: [
+                    "Recording of financial transactions",
+                    "Classifying the recorded transactions",
+                    "Summarising the classified transactions",
+                    "Interpreting the results"
+                ]
+            },
+            
+        ],
         },
+        {
+            title: "Objectives of accounting",
+            subpoints: [
+                "To maintain systematic records",
+                "To ascertain the financial position",
+                "To ascertain the results of operations",
+                "To provide information to management",
+                "To provide information to investors and creditors",
+                "To provide information to government and regulatory authorities"
+            ]
+        },
+        {
+            title: "Relationship of accounting with other disciplines",
+                subpoints: [
+                    "Accounts & Economics- Accounting is viewed as a system, which provides data to the users to permit informed judgement and decisions whereas economics is viewed as as a science of rational decision making,"
+                ]
+        },
+        {
+                title: "Functions of accounting",
+                subpoints: [
+                    "Measurement of performance",
+                    "Forecasting future performance",
+                    "Aid in rational decision making",
+                    "Comparison and Evaluation of financial results",
+                    "Identifying the weaknesses",
+                    "Government regulation and taxation"
+                ]
+        },
+
       ],
       studyTips:
         "Focus on definitions and concept-based examples because this chapter supports the full accounting syllabus.",
