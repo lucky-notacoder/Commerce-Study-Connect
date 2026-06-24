@@ -1,0 +1,36 @@
+window.caFoundationChapters = {
+  "ca-foundation-accounting": [
+    "Theoretical Framework",
+    "Accounting Process",
+    "Bank Reconciliation Statement",
+    "Inventories",
+    "Depreciation and Amortisation",
+    "Final Accounts of Sole Proprietors",
+  ],
+  "ca-foundation-business-laws": [
+    "Indian Contract Act, 1872",
+    "Sale of Goods Act, 1930",
+    "Indian Partnership Act, 1932",
+    "Limited Liability Partnership Act, 2008",
+    "Companies Act, 2013",
+  ],
+  "ca-foundation-quantitative-aptitude": [
+    "Ratio and Proportion",
+    "Equations",
+    "Time Value of Money",
+    "Logical Reasoning",
+    "Measures of Central Tendency",
+    "Probability",
+  ],
+  "ca-foundation-business-economics": [
+    "Nature and Scope of Business Economics",
+    "Theory of Demand and Supply",
+    "Theory of Production and Cost",
+    "Price Determination in Different Markets",
+    "Determinants of National Income",
+    "Public Finance",
+    "Money Market",
+    "International Trade",
+    "Indian Economy",
+  ],
+};

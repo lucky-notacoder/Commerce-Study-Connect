@@ -48,6 +48,61 @@
   const getChapterUrl = (subjectId, chapterName) =>
     `chapter.html?subject=${encodeURIComponent(subjectId)}&chapter=${encodeURIComponent(chapterName)}`;
 
+  const getTopicTitle = (topic) =>
+    typeof topic === "string" ? topic : topic?.title || topic?.name || "";
+
+  const getTopicSubpoints = (topic, info, topicCount) => {
+    if (topic && typeof topic === "object") {
+      return (
+        topic.subpoints ||
+        topic.points ||
+        topic.details ||
+        topic.information ||
+        []
+      );
+    }
+
+    if (info.topicDetails && info.topicDetails[topic]) {
+      return info.topicDetails[topic];
+    }
+
+    if (topicCount === 1 && Array.isArray(info.subpoints)) {
+      return info.subpoints;
+    }
+
+    return [];
+  };
+
+  const renderTopicSubpoints = (subpoints) => {
+    if (!Array.isArray(subpoints) || !subpoints.length) {
+      return "";
+    }
+
+    return `
+      <ul class="chapter-topic-subpoints">
+        ${subpoints
+          .map((subpoint) => `<li>${escapeHtml(subpoint)}</li>`)
+          .join("")}
+      </ul>
+    `;
+  };
+
+  const renderTopic = (topic, info, topicCount) => {
+    const title = getTopicTitle(topic);
+    const subpoints = getTopicSubpoints(topic, info, topicCount);
+
+    if (!title) {
+      return "";
+    }
+
+    return `
+      <li>
+        <span class="chapter-topic-title">${escapeHtml(title)}</span>
+        ${renderTopicSubpoints(subpoints)}
+      </li>
+    `;
+  };
+
   const renderNotFound = () => {
     content.innerHTML = `
       <div class="chapter-reading-header">
@@ -99,7 +154,11 @@
             <section>
               <h2>Important Topics</h2>
               <ul class="chapter-reading-list">
-                ${topics.map((topic) => `<li>${escapeHtml(topic)}</li>`).join("")}
+                ${topics
+                  .map((topic) =>
+                    renderTopic(topic, info, topics.length)
+                  )
+                  .join("")}
               </ul>
             </section>
           `

@@ -3,7 +3,9 @@
   const courseCatalog = window.courseCatalog || [];
   const quizContent = document.getElementById("quiz-content");
   const quizTitle = document.getElementById("quiz-title");
-  const submitBtn = document.getElementById("submit-quiz");
+  const performanceBtn = document.getElementById("performance-tab");
+  const performanceContent = document.getElementById("performance-content");
+  const performanceStorageKey = "commerceStudyQuizPerformance";
 
   const getUrlParameter = (param) => {
     const url = new URLSearchParams(window.location.search);
@@ -29,6 +31,95 @@
       .replace(/>/g, "&gt;")
       .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#039;");
+
+  const getStoredPerformance = () => {
+    try {
+      return JSON.parse(localStorage.getItem(performanceStorageKey)) || [];
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const saveStoredPerformance = (attempts) => {
+    localStorage.setItem(performanceStorageKey, JSON.stringify(attempts));
+  };
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleString([], {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  const togglePerformanceView = (showPerformance) => {
+    if (!performanceContent) {
+      return;
+    }
+
+    performanceContent.hidden = !showPerformance;
+    quizContent.hidden = showPerformance;
+    performanceBtn?.classList.toggle("active", showPerformance);
+  };
+
+  const renderPerformance = () => {
+    const attempts = getStoredPerformance();
+
+    if (!performanceContent) {
+      return;
+    }
+
+    performanceContent.innerHTML = `
+      <div class="performance-card">
+        <div class="performance-header">
+          <div>
+            <span class="eyebrow">Performance</span>
+            <h2>Your Quiz History</h2>
+          </div>
+          <button type="button" class="btn btn-secondary" id="back-to-quiz-btn">Back to Quiz</button>
+        </div>
+        <p class="muted">Quiz attempts are saved locally and will appear here after you submit.</p>
+        ${attempts.length ? `
+          <div class="performance-table-wrapper">
+            <table class="performance-table">
+              <thead>
+                <tr>
+                  <th>Quiz</th>
+                  <th>Score</th>
+                  <th>Percentage</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${attempts
+                  .map(
+                    (attempt) => `
+                      <tr>
+                        <td>${escapeHtml(attempt.subjectName)}</td>
+                        <td>${attempt.correct}/${attempt.totalQuestions}</td>
+                        <td>${attempt.percentage}%</td>
+                        <td>${escapeHtml(formatDate(attempt.date))}</td>
+                      </tr>
+                    `
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
+        ` : `
+          <div class="performance-no-data">
+            <p>No quiz attempts found yet.</p>
+            <p class="performance-details">Complete a quiz and submit your answers to track your performance here.</p>
+          </div>
+        `}
+      </div>
+    `;
+
+    togglePerformanceView(true);
+  };
 
   const getSubjectName = (subjectId) => {
     const parts = subjectId.split("-");
@@ -113,7 +204,17 @@
           `
         )
         .join("")}
+      <div class="quiz-footer">
+        <button type="button" class="btn btn-primary" id="submit-quiz-btn">Submit Quiz</button>
+        <p class="muted">Submit your answers when you finish the last question.</p>
+      </div>
     `;
+    if (performanceContent) {
+      performanceContent.hidden = true;
+    }
+    if (quizContent) {
+      quizContent.hidden = false;
+    }
   };
 
   const calculateScore = () => {
@@ -136,15 +237,40 @@
 
     const percentage = Math.round((correct / totalQuestions) * 100);
     const subjectName = getSubjectName(subjectId);
-    
+    const attempts = getStoredPerformance();
+
+    const attempt = {
+      subjectName,
+      correct,
+      totalQuestions,
+      percentage,
+      date: new Date().toISOString(),
+    };
+
+    attempts.unshift(attempt);
+    saveStoredPerformance(attempts.slice(0, 20));
+
     alert(
-      `Quiz Complete!\n\nSubject: ${subjectName}\nScore: ${correct}/${totalQuestions} (${percentage}%)\n\nGreat effort! Review the explanations to strengthen your understanding.`
+      `Quiz Complete!\n\nSubject: ${subjectName}\nScore: ${correct}/${totalQuestions} (${percentage}%)\n\nYour attempt has been saved to the Performance tab.`
     );
+
+    renderPerformance();
   };
 
-  submitBtn?.addEventListener("click", (e) => {
-    e.preventDefault();
-    calculateScore();
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (target instanceof HTMLElement && target.matches("#submit-quiz-btn")) {
+      calculateScore();
+    }
+
+    if (target instanceof HTMLElement && target.matches("#back-to-quiz-btn")) {
+      togglePerformanceView(false);
+    }
+  });
+
+  performanceBtn?.addEventListener("click", () => {
+    renderPerformance();
   });
 
   renderQuiz();

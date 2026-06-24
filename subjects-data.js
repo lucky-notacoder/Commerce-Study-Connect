@@ -1,58 +1,7 @@
-window.subjectChapters = {
-  "ca-foundation-accounting": [
-    "Theoretical Framework",
-    "Accounting Process",
-    "Bank Reconciliation Statement",
-    "Inventories",
-    "Depreciation and Amortisation",
-    "Final Accounts of Sole Proprietors",
-  ],
-  "ca-foundation-business-laws": [
-    "Indian Contract Act, 1872",
-    "Sale of Goods Act, 1930",
-    "Indian Partnership Act, 1932",
-    "Limited Liability Partnership Act, 2008",
-    "Companies Act, 2013",
-  ],
-  "ca-foundation-quantitative-aptitude": [
-    "Ratio and Proportion",
-    "Equations",
-    "Time Value of Money",
-    "Logical Reasoning",
-    "Measures of Central Tendency",
-    "Probability",
-  ],
-  "ca-foundation-business-economics": [
-    "Nature and Scope of Business Economics",
-    "Theory of Demand and Supply",
-    "Theory of Production and Cost",
-    "Price Determination in Different Markets",
-    "Business Cycles",
-  ],
-  "cma-foundation-fundamentals-of-business-laws": [
-    "Indian Contract Act",
-    "Sale of Goods Act",
-    "Negotiable Instruments Act",
-    "Business Communication",
-  ],
-  "cma-foundation-fundamentals-of-financial-accounting": [
-    "Accounting Fundamentals",
-    "Journal, Ledger, and Trial Balance",
-    "Subsidiary Books",
-    "Depreciation Accounting",
-    "Final Accounts",
-  ],
-  "cma-foundation-fundamentals-of-business-mathematics": [
-    "Arithmetic",
-    "Algebra",
-    "Calculus",
-    "Statistics",
-    "Probability",
-  ],
-  "cma-foundation-fundamentals-of-business-economics": [
-    "Basic Economics",
-    "Forms of Market",
-    "Money and Banking",
-    "Indian Economy",
-  ],
-};
+// This file aggregates chapter lists from separate data files.
+// Place CA and CMA chapter files in the data/ca-foundation and data/cma-foundation folders.
+window.subjectChapters = Object.assign(
+  {},
+  window.caFoundationChapters || {},
+  window.cmaFoundationChapters || {}
+);

@@ -646,6 +646,22 @@ a {
   margin-top: 0.5rem;
 }
 
+.chapter-topic-title {
+  font-weight: 700;
+}
+
+.chapter-topic-subpoints {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  margin: 0.45rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.chapter-topic-subpoints li + li {
+  margin-top: 0.25rem;
+}
+
 .chapter-reading-tip {
   border-radius: 1rem;
   background: #fff7ed;
@@ -945,11 +961,70 @@ a {
 
 .quiz-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
   padding: 1.5rem;
   border-top: 1px solid var(--border);
+}
+
+.performance-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+  margin-top: 2rem;
+}
+
+.performance-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.performance-table-wrapper {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.performance-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+}
+
+.performance-table th,
+.performance-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.performance-table th {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.performance-table td {
+  font-size: 0.96rem;
+}
+
+.performance-no-data {
+  padding: 2rem 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 1rem;
+  background: var(--surface-strong);
+  margin-top: 1.5rem;
+}
+
+.performance-details {
+  margin-top: 0.75rem;
+  color: var(--muted);
 }
 
 /* Quiz Page Styles */
@@ -1131,15 +1206,6 @@ a {
   .quiz-section {
     padding: 1rem 0;
   }
-}
-  width: 2.4rem;
-  height: 2.4rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: #f8fafc;
-  color: var(--muted);
-  margin: 0;
 }
 
 .footer-note {

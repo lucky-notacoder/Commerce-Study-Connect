@@ -19,7 +19,7 @@
         </nav>
         <div class="header-actions">
           <a class="btn btn-secondary" href="test.html">Back to Tests</a>
-          <a class="btn btn-primary" href="#" id="submit-quiz">Submit Quiz</a>
+          <button type="button" class="btn btn-primary" id="performance-tab">Performance</button>
         </div>
       </div>
     </header>
@@ -34,6 +34,7 @@
           <div id="quiz-content">
             <p class="muted">Loading questions...</p>
           </div>
+          <div id="performance-content" hidden></div>
         </div>
       </section>
     </main>
@@ -75,6 +76,12 @@
       </p>
     </footer>
 
+    <script src="data/ca-foundation/courses.js"></script>
+    <script src="data/cma-foundation/courses.js"></script>
+    <script src="data/ca-inter/courses.js"></script>
+    <script src="data/cma-inter/courses.js"></script>
+    <script src="data/ca-final/courses.js"></script>
+    <script src="data/cma-final/courses.js"></script>
     <script src="courses-data.js"></script>
     <script src="test-data.js"></script>
     <script src="quiz.js"></script>
