@@ -1,6 +1,10 @@
 window.caFoundationChapters = {
   "ca-foundation-accounting": [
     "Theoretical Framework",
+    "Accounting Concepts, principles and Conventions",
+    "Capital and Revenue Expenditures and Receipts",
+    "Contingent Assets and Contingent Liabilities",
+    "Accounting Policies",
     "Accounting Process",
     "Bank Reconciliation Statement",
     "Inventories",

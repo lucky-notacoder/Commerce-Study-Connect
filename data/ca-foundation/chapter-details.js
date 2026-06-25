@@ -40,8 +40,12 @@ window.caFoundationChapterDetails = {
         {
             title: "Relationship of accounting with other disciplines",
                 subpoints: [
-                    "Accounts & Economics- Accounting is viewed as a system, which provides data to the users to permit informed judgement and decisions whereas economics is viewed as as a science of rational decision making,"
-                ]
+                    "Accounts & Economics- Accounting is viewed as a system, which provides data to the users to permit informed judgement and decisions whereas economics is viewed as as a science of rational decision making",
+                    "Accounts & Statistics- Accounting is a system of recording, classifying and summarising financial transactions and events whereas statistics is a science of collecting, analysing and interpreting data.",
+                    "Accounts & Management- Accounting is a system of recording, classifying and summarising financial transactions and events whereas management is a process of planning, organising, directing and controlling the activities of an organisation.",
+                    "Accounts & Law- Accounting is a system of recording, classifying and summarising financial transactions and events whereas law is a system of rules and regulations which are enforced through social institutions to govern behaviour.",
+                    "Accounts & Mathematics- Accounting is a system of recording, classifying and summarising financial transactions and events whereas mathematics is a science of numbers and their operations, interrelations, combinations, generalisations and abstractions and of space configurations and their structure, measurement and transformations.",
+                  ]
         },
         {
                 title: "Functions of accounting",
@@ -58,6 +62,136 @@ window.caFoundationChapterDetails = {
       ],
       studyTips:
         "Focus on definitions and concept-based examples because this chapter supports the full accounting syllabus.",
+    },
+    "Accounting Concepts, principles and Conventions": {
+      overview:
+        "Understand the basic accounting concepts, principles, and conventions that guide the preparation of financial statements.",
+      topics: [
+        {
+          title: "Accounting Concepts",
+          subpoints: [
+            "Business Entity Concept",
+            "Money Measurement Concept",
+            "Going Concern Concept",
+            "Cost Concept",
+            "Dual Aspect Concept",
+            "Accrual Concept",
+            "Matching Concept",
+            "Realisation Concept"
+          ]
+        },
+        {
+          title: "Accounting Principles",
+          subpoints: [
+            "Revenue Recognition Principle",
+            "Consistency Principle",
+            "Materiality Principle",
+            "Conservatism Principle"
+          ]
+        },
+        {
+          title: "Accounting Conventions",
+          subpoints: [
+            "Full Disclosure Convention",
+            "Consistency Convention",
+            "Conservatism Convention"
+          ]
+        }
+      ],
+      studyTips:
+        "Create a comparison chart for concepts, principles, and conventions to remember their differences easily.",
+    },
+    "Capital and Revenue Expenditures and Receipts": {
+      overview:
+        "Learn to distinguish between capital and revenue expenditures and receipts, which is crucial for accurate financial reporting.",
+      topics: [
+        {
+          title: "Capital Expenditure",
+          subpoints: [
+            "Expenditure incurred to acquire or improve fixed assets",
+            "Benefits extend beyond the current accounting period",
+            "Examples: Purchase of machinery, building construction"
+          ]
+        },
+        {
+          title: "Revenue Expenditure",
+          subpoints: [
+            "Expenditure incurred for the day-to-day running of the business",
+            "Benefits are consumed within the current accounting period",
+            "Examples: Salaries, rent, utilities"
+          ]
+        },
+        {
+          title: "Capital Receipts",
+          subpoints: [
+            "Receipts that create a liability or reduce an asset",
+            "Examples: Loans received, sale of fixed assets"
+          ]
+        },
+        {
+          title: "Revenue Receipts",
+          subpoints: [
+            "Receipts that do not create a liability or reduce an asset",
+            "Examples: Sales revenue, interest income"
+          ]
+        }
+      ],
+      studyTips:
+        "Use real-life business examples to classify expenditures and receipts as capital or revenue for better understanding.",
+    },
+    "Contingent Assets and Contingent Liabilities": {
+      overview:
+        "Understand the nature of contingent assets and liabilities, which depend on the occurrence of future events.",
+      topics: [
+        {
+          title: "Contingent Assets",
+          subpoints: [
+            "Potential assets that may arise from past events",
+            "Recognition is not allowed until they become virtually certain",
+            "Examples: Pending legal claims, insurance claims"
+          ]
+        },
+        {
+          title: "Contingent Liabilities",
+          subpoints: [
+            "Potential obligations that may arise from past events",
+            "Recognition is required if the outflow of resources is probable",
+            "Examples: Pending lawsuits, guarantees given"
+          ]
+        }
+      ],
+      studyTips:
+        "Focus on the probability and timing of events to determine whether to recognize or disclose contingent items.",
+    },
+    
+    "Accounting Policies": {
+      overview:
+        "Learn the principles and methods adopted by an entity in preparing and presenting financial statements.",
+      topics: [
+        {
+          title: "Definition of Accounting Policies",
+          subpoints: [
+            "Specific principles, bases, conventions, rules, and practices applied by an entity",
+            "Ensure consistency and comparability of financial statements"
+          ]
+        },
+        {
+          title: "Selection of Accounting Policies",
+          subpoints: [
+            "Management's responsibility to select appropriate policies",
+            "Consideration of industry practices and regulatory requirements"
+          ]
+        },
+        {
+          title: "Disclosure of Accounting Policies",
+          subpoints: [
+            "Mandatory disclosure in financial statements",
+            "Provide transparency to users of financial statements"
+          ]
+        }
+      ],
+      studyTips:
+        "Review examples of different accounting policies used in practice to understand their impact on financial statements.",
     },
     "Accounting Process": {
       overview:
