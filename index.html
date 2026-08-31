@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Commerce Study Connect | Track Your Learning Progress</title>
+    <link rel="icon" href="data/Images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -18,7 +19,7 @@
           <a href="contact.html">Contact</a>
         </nav>
         <div class="header-actions">
-          <a class="btn btn-secondary" href="contact.html">Sign Up</a>
+          <a class="btn btn-outline auth-trigger" href="#auth" data-auth-mode="signin">Sign In</a>
           <a class="btn btn-primary" href="pricing.html">Get Started</a>
         </div>
       </div>
@@ -44,36 +45,36 @@
             <div class="stat-card">
               <div>
                 <h3>Course</h3>
-                <p>Web Design</p>
+                <p id="dashboard-course-name">Web Design</p>
               </div>
-              <span>Active</span>
+              <span id="dashboard-course-status">Active</span>
             </div>
             <div class="stats-grid">
               <div class="stat-box">
-                <strong>92.5%</strong>
+                <strong id="dashboard-progress">92.5%</strong>
                 <p>Progress</p>
               </div>
               <div class="stat-box">
-                <strong>24</strong>
+                <strong id="dashboard-lessons">24</strong>
                 <p>Lessons</p>
               </div>
               <div class="stat-box">
-                <strong>8.4</strong>
+                <strong id="dashboard-rating">8.4</strong>
                 <p>Rating</p>
               </div>
             </div>
             <div class="dashboard-card">
               <div class="dashboard-row">
                 <span>Quiz score</span>
-                <strong>89</strong>
+                <strong id="dashboard-quiz-score">89</strong>
               </div>
               <div class="dashboard-row muted">
                 <span>Lessons completed</span>
-                <strong>18/20</strong>
+                <strong id="dashboard-lessons-completed">18/20</strong>
               </div>
               <div class="dashboard-row progress">
                 <span>Learning streak</span>
-                <strong>12 days</strong>
+                <strong id="dashboard-streak">12 days</strong>
               </div>
             </div>
           </div>
@@ -221,5 +222,9 @@
         © 2026 Your Learning Platform. All Rights Reserved.
       </p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
   </body>
 </html>

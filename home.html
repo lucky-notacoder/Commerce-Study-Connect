@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Commerce Study Connect | Home</title>
+    <link rel="icon" href="data/Images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -18,7 +19,7 @@
           <a href="contact.html">Contact</a>
         </nav>
         <div class="header-actions">
-          <a class="btn btn-secondary" href="contact.html">Sign Up</a>
+          <a class="btn btn-outline auth-trigger" href="#auth" data-auth-mode="signin">Sign In</a>
           <a class="btn btn-primary" href="pricing.html">Get Started</a>
         </div>
       </div>
@@ -186,5 +187,8 @@
         © 2026 Your Learning Platform. All Rights Reserved.
       </p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
   </body>
 </html>

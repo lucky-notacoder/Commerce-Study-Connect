@@ -4,6 +4,7 @@
   const subjectChapters = window.subjectChapters || {};
   let expandedLevelId = "";
   let selectedSubjectId = "";
+  let completedChapters = [];
 
   if (!courseLevels.length) {
     return;
@@ -33,6 +34,7 @@
     return courseLevels.flatMap((level) =>
       level.subjects.map((subject) => {
         const id = `${toSlug(level.level)}-${toSlug(subject.name)}`;
+        const subjectChapterPrefix = `${id}:`;
 
         return {
           ...subject,
@@ -40,9 +42,32 @@
           level: level.level,
           liveSessions: level.liveSessions,
           chosen: choices[id] || 0,
+          completed: completedChapters.filter((chapterKey) =>
+            chapterKey.startsWith(subjectChapterPrefix)
+          ).length,
         };
       })
     );
+  };
+
+  const loadCompletedChapters = async (session) => {
+    completedChapters = [];
+
+    if (!session || !window.studySupabaseClient) {
+      render();
+      return;
+    }
+
+    const { data } = await window.studySupabaseClient
+      .from("student_progress")
+      .select("completed_chapters")
+      .eq("user_id", session.user.id)
+      .maybeSingle();
+
+    completedChapters = Array.isArray(data?.completed_chapters)
+      ? data.completed_chapters
+      : [];
+    render();
   };
 
   const setText = (id, value) => {
@@ -187,7 +212,7 @@
                           <div class="feature-card ${selectedSubjectId === subject.id ? "is-selected" : ""}">
                             <h3>${subject.name}</h3>
                             <p>${subject.description}</p>
-                            <p class="course-meta">${subject.chosen} times chosen.</p>
+                            <p class="course-meta">${subject.completed} chapters completed.</p>
                             <button class="btn btn-primary course-choice" type="button" data-course-id="${subject.id}">
                               ${selectedSubjectId === subject.id ? "Selected" : "Choose Subject"}
                             </button>
@@ -249,6 +274,10 @@
     selectedSubjectId = courseId;
     saveStoredChoices(choices);
     render();
+  });
+
+  document.addEventListener("study-auth-state", (event) => {
+    loadCompletedChapters(event.detail.session);
   });
 
   render();

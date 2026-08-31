@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Commerce Study Connect | Test</title>
+    <link rel="icon" href="data/Images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -18,7 +19,7 @@
           <a href="contact.html">Contact</a>
         </nav>
         <div class="header-actions">
-          <a class="btn btn-secondary" href="contact.html">Sign Up</a>
+          <a class="btn btn-outline auth-trigger" href="#auth" data-auth-mode="signin">Sign In</a>
           <a class="btn btn-primary" href="#test-section">Start Test</a>
         </div>
       </div>
@@ -93,6 +94,21 @@
           </div>
         </div>
       </section>
+
+      <section id="test-modules-section" class="features-section test-modules-section">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Test Modules</h2>
+            <p>
+              Attempt three model question-paper sets for each subject with an
+              available MCQ bank.
+            </p>
+          </div>
+          <div class="feature-grid" id="test-module-list">
+            <p class="muted">Loading test modules...</p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -146,5 +162,8 @@
     <script src="data/cma-final/tests.js"></script>
     <script src="test-data.js"></script>
     <script src="test.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
   </body>
 </html>

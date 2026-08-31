@@ -1,6 +1,6 @@
 // CA Foundation chapter details
 window.caFoundationChapterDetails = {
-  "ca-foundation-accounting": {
+"ca-foundation-accounting": {
     "Theoretical Framework": {
       overview:
         "Learn the meaning, objectives, principles, concepts, and conventions that form the base of accounting.",

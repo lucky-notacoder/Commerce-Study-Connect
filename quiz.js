@@ -6,6 +6,7 @@
   const performanceBtn = document.getElementById("performance-tab");
   const performanceContent = document.getElementById("performance-content");
   const performanceStorageKey = "commerceStudyQuizPerformance";
+  const modelPaperSize = 20;
 
   const getUrlParameter = (param) => {
     const url = new URLSearchParams(window.location.search);
@@ -42,6 +43,22 @@
 
   const saveStoredPerformance = (attempts) => {
     localStorage.setItem(performanceStorageKey, JSON.stringify(attempts));
+  };
+
+  const saveSupabasePerformance = async (attempt) => {
+    const client = window.studySupabaseClient;
+    if (!client) return;
+
+    const { data } = await client.auth.getSession();
+    const user = data.session?.user;
+    if (!user) return;
+
+    await client.from("student_progress").upsert({
+      user_id: user.id,
+      course_name: attempt.subjectName,
+      quiz_score: attempt.percentage,
+      updated_at: new Date().toISOString()
+    }, { onConflict: "user_id" });
   };
 
   const formatDate = (isoString) => {
@@ -138,6 +155,25 @@
     return unSlug(subjectId);
   };
 
+  const getModelPaperNumber = () => {
+    const paper = Number(getUrlParameter("paper"));
+    return Number.isInteger(paper) && paper >= 1 && paper <= 3 ? paper : 0;
+  };
+
+  const getModelPaperQuestions = (questions, paperNumber) => {
+    const allQuestions = Object.values(questions).flat();
+
+    if (allQuestions.length <= modelPaperSize) {
+      return allQuestions;
+    }
+
+    const start = (paperNumber - 1) * modelPaperSize;
+    return Array.from(
+      { length: modelPaperSize },
+      (_, index) => allQuestions[(start + index) % allQuestions.length]
+    );
+  };
+
   const renderQuiz = () => {
     const subjectId = getUrlParameter("subject");
 
@@ -155,11 +191,11 @@
       return;
     }
 
-    // If there are more than 20 questions available, pick a random set of 20
-    // and keep the original `testData` untouched. Store the selected set on
-    // `window._currentQuizQuestions` so scoring uses the same selection.
+    // Model papers are fixed 20-question sets. Question Bank Practice keeps
+    // the existing random 20-question behaviour.
     const allQuestionsArray = Object.values(questions).flat();
     const totalAvailable = allQuestionsArray.length;
+    const modelPaperNumber = getModelPaperNumber();
 
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
@@ -172,18 +208,28 @@
     }
 
     let renderQuestionsObj = questions;
-    if (totalAvailable > 20) {
-      const sampled = shuffle(allQuestionsArray.slice()).slice(0, 20);
+    let quizLabel = getSubjectName(subjectId);
+
+    if (modelPaperNumber) {
+      renderQuestionsObj = {
+        [`Model Question Paper - Set ${modelPaperNumber}`]: getModelPaperQuestions(
+          questions,
+          modelPaperNumber
+        ),
+      };
+      quizLabel += ` - Model Question Paper Set ${modelPaperNumber}`;
+    } else if (totalAvailable > modelPaperSize) {
+      const sampled = shuffle(allQuestionsArray.slice()).slice(0, modelPaperSize);
       renderQuestionsObj = { "Random 20 MCQs": sampled };
     }
 
     // expose the currently-rendered questions for scoring and submission
     window._currentQuizQuestions = renderQuestionsObj;
+    window._currentQuizLabel = quizLabel;
 
-    const subjectName = getSubjectName(subjectId);
     quizTitle.innerHTML = `
       <span class="eyebrow">Quiz</span>
-      <h1>${escapeHtml(subjectName)}</h1>
+      <h1>${escapeHtml(quizLabel)}</h1>
     `;
 
     const totalQuestions = Object.values(window._currentQuizQuestions).flat().length;
@@ -223,10 +269,6 @@
                               )
                               .join("")}
                           </div>
-                          <details class="question-details">
-                            <summary>Show Explanation</summary>
-                            <p>${escapeHtml(q.explanation)}</p>
-                          </details>
                         </article>
                       `;
                     }
@@ -275,7 +317,8 @@
     });
 
     const percentage = Math.round((correct / totalQuestions) * 100);
-    const subjectName = getSubjectName(subjectId);
+    const subjectName =
+      window._currentQuizLabel || getSubjectName(subjectId);
     const attempts = getStoredPerformance();
 
     const attempt = {
@@ -288,6 +331,7 @@
 
     attempts.unshift(attempt);
     saveStoredPerformance(attempts.slice(0, 20));
+    saveSupabasePerformance(attempt);
 
     // Show inline result with actions so user can take another random test
     const resultHtml = `

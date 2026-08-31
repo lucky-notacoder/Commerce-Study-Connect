@@ -1,9 +1,12 @@
 (function () {
   const courseCatalog = window.courseCatalog || [];
+  const testData = window.testData || {};
   const subjectList = document.getElementById("test-subject-list");
-  let expandedLevelId = "";
+  const moduleList = document.getElementById("test-module-list");
+  let expandedPracticeLevelId = "";
+  let expandedModuleLevelId = "";
 
-  if (!subjectList || !courseCatalog.length) {
+  if ((!subjectList && !moduleList) || !courseCatalog.length) {
     return;
   }
 
@@ -21,7 +24,39 @@
       .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#039;");
 
-  const renderLevels = () => {
+  const getQuestionCount = (subjectId) =>
+    Object.values(testData[subjectId] || {}).flat().length;
+
+  const getModuleLinks = (subjectId) => {
+    const questionCount = getQuestionCount(subjectId);
+
+    if (!questionCount) {
+      return '<p class="muted">Model question papers will be added soon.</p>';
+    }
+
+    const moduleLinks = [1, 2, 3]
+      .map(
+        (set) => `
+          <a class="btn btn-outline" href="quiz.html?subject=${encodeURIComponent(subjectId)}&paper=${set}">
+            Model Paper - Set ${set}
+          </a>
+        `
+      )
+      .join("");
+
+    return `
+      <p class="course-meta">${questionCount} MCQs available</p>
+      <div class="test-module-list" aria-label="Model question papers">
+        ${moduleLinks}
+      </div>
+    `;
+  };
+
+  const renderPracticeLevels = () => {
+    if (!subjectList) {
+      return;
+    }
+
     if (!courseCatalog.length) {
       subjectList.innerHTML =
         '<p class="muted">No subjects are available for test selection.</p>';
@@ -31,7 +66,7 @@
     subjectList.innerHTML = courseCatalog
       .map((course) => {
         const levelId = toSlug(course.level);
-        const isExpanded = expandedLevelId === levelId;
+        const isExpanded = expandedPracticeLevelId === levelId;
 
         return `
           <article class="level-card ${isExpanded ? "is-expanded" : ""}">
@@ -52,7 +87,54 @@
                             <h3>${escapeHtml(subject.name)}</h3>
                             <p>${escapeHtml(subject.description)}</p>
                             <p class="course-meta">Satisfaction: ${subject.satisfaction}%</p>
-                            <a class="btn btn-primary" href="quiz.html?subject=${encodeURIComponent(subjectId)}">Start Test</a>
+                            <a class="btn btn-primary" href="quiz.html?subject=${encodeURIComponent(subjectId)}">Question Bank Practice</a>
+                          </article>
+                        `;
+                      })
+                      .join("")}
+                  </div>
+                `
+                : ""
+            }
+          </article>
+        `;
+      })
+      .join("");
+  };
+
+  const renderModuleLevels = () => {
+    if (!moduleList) {
+      return;
+    }
+
+    if (!courseCatalog.length) {
+      moduleList.innerHTML = '<p class="muted">No test modules are available yet.</p>';
+      return;
+    }
+
+    moduleList.innerHTML = courseCatalog
+      .map((course) => {
+        const levelId = toSlug(course.level);
+        const isExpanded = expandedModuleLevelId === levelId;
+
+        return `
+          <article class="level-card ${isExpanded ? "is-expanded" : ""}">
+            <button class="level-heading" type="button" data-module-level-id="${levelId}" aria-expanded="${isExpanded}">
+              <span class="eyebrow">${escapeHtml(course.level)}</span>
+              <strong>${course.subjects.length} subjects</strong>
+            </button>
+            ${
+              isExpanded
+                ? `
+                  <div class="subject-grid">
+                    ${course.subjects
+                      .map((subject) => {
+                        const subjectId = `${levelId}-${toSlug(subject.name)}`;
+                        return `
+                          <article class="feature-card">
+                            <h3>${escapeHtml(subject.name)}</h3>
+                            <p>${escapeHtml(subject.description)}</p>
+                            ${getModuleLinks(subjectId)}
                           </article>
                         `;
                       })
@@ -68,14 +150,25 @@
   };
 
   const render = () => {
-    renderLevels();
+    renderPracticeLevels();
+    renderModuleLevels();
   };
 
   document.addEventListener("click", (event) => {
     const levelButton = event.target.closest("[data-level-id]");
     if (levelButton) {
       const levelId = levelButton.dataset.levelId;
-      expandedLevelId = expandedLevelId === levelId ? "" : levelId;
+      expandedPracticeLevelId =
+        expandedPracticeLevelId === levelId ? "" : levelId;
+      render();
+      return;
+    }
+
+    const moduleLevelButton = event.target.closest("[data-module-level-id]");
+    if (moduleLevelButton) {
+      const levelId = moduleLevelButton.dataset.moduleLevelId;
+      expandedModuleLevelId =
+        expandedModuleLevelId === levelId ? "" : levelId;
       render();
     }
   });

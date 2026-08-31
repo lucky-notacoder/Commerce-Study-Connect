@@ -231,11 +231,13 @@
           ? `<a class="btn btn-outline" href="${getChapterUrl(subjectId, previousChapter)}">Previous Chapter</a>`
           : `<a class="btn btn-outline" href="courses.html">Choose Another Chapter</a>`
       }
-      ${
-        nextChapter
-          ? `<a class="btn btn-primary" href="${getChapterUrl(subjectId, nextChapter)}">Next Chapter</a>`
-          : `<a class="btn btn-primary" href="courses.html">Finish Subject</a>`
-      }
+      <button class="btn btn-secondary" type="button" id="complete-chapter-btn"
+        data-subject-id="${escapeHtml(subjectId)}" data-subject-name="${escapeHtml(subject.name)}"
+        data-chapter-name="${escapeHtml(chapterName)}"
+        data-next-chapter-url="${nextChapter ? escapeHtml(getChapterUrl(subjectId, nextChapter)) : "courses.html"}"
+        data-next-chapter-label="${nextChapter ? "Next Chapter" : "Finish Subject"}">
+        Mark Chapter Complete
+      </button>
     </div>
   `;
 })();
