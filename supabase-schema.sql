@@ -19,6 +19,21 @@ alter table public.student_progress
 
 alter table public.student_progress enable row level security;
 
+create table if not exists public.quiz_attempts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  subject_name text not null,
+  correct_answers integer not null default 0,
+  total_questions integer not null default 0,
+  percentage numeric(5, 2) not null default 0,
+  attempted_at timestamptz not null default now()
+);
+
+create index if not exists quiz_attempts_user_attempted_idx
+  on public.quiz_attempts(user_id, attempted_at desc);
+
+alter table public.quiz_attempts enable row level security;
+
 do $$
 begin
   if not exists (
@@ -52,6 +67,34 @@ begin
     create policy "Users can update their own progress"
       on public.student_progress for update
       using (auth.uid() = user_id)
+      with check (auth.uid() = user_id);
+  end if;
+end
+$$;
+
+notify pgrst, 'reload schema';
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and tablename = 'quiz_attempts'
+      and policyname = 'Users can read their own quiz attempts'
+  ) then
+    create policy "Users can read their own quiz attempts"
+      on public.quiz_attempts for select
+      using (auth.uid() = user_id);
+  end if;
+
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and tablename = 'quiz_attempts'
+      and policyname = 'Users can add their own quiz attempts'
+  ) then
+    create policy "Users can add their own quiz attempts"
+      on public.quiz_attempts for insert
       with check (auth.uid() = user_id);
   end if;
 end

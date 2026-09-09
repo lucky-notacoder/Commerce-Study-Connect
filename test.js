@@ -30,10 +30,6 @@
   const getModuleLinks = (subjectId) => {
     const questionCount = getQuestionCount(subjectId);
 
-    if (!questionCount) {
-      return '<p class="muted">Model question papers will be added soon.</p>';
-    }
-
     const moduleLinks = [1, 2, 3]
       .map(
         (set) => `
@@ -45,7 +41,7 @@
       .join("");
 
     return `
-      <p class="course-meta">${questionCount} MCQs available</p>
+      <p class="course-meta">${questionCount ? `${questionCount} MCQs available` : "Model papers ready for question data"}</p>
       <div class="test-module-list" aria-label="Model question papers">
         ${moduleLinks}
       </div>

@@ -5468,7 +5468,7 @@ window.cmaInterTests['cma-intermediate-business-laws-and-ethics'] = { "Business 
  },
  {
   "Q No": 165,
-  "Question": "Any article which is imported into India is also liable to a duty equal to the excise duty for the time being leviable on a like article if produced or manufactured in India. This duty is called\nasÂ Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â Â ",
+  "Question": "Any article which is imported into India is also liable to a duty equal to the excise duty for the time being leviable on a like article if produced or manufactured in India. This duty is called\nas",
   "Option A": "Additional duty",
   "Option B": "Countervailing Duty",
   "Option C": "Special duty",

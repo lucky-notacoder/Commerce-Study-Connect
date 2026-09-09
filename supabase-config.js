@@ -1,4 +1,4 @@
 window.SUPABASE_CONFIG = {
-  url: "https://umcmofhssruvowewxuuh.supabase.co",
-  anonKey: "sb_publishable_YKbH7IyZPVOjms_obW2i8A_K9EipEu4"
+  url: "https://xjwmhuwszydmerdgtlbz.supabase.co",
+  anonKey: "sb_publishable_dnTBR9q4W3fsD_H9lgcxGA_ZR0vZmbt"
 };

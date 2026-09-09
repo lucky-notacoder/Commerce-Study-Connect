@@ -5,6 +5,15 @@
     <meta name="google-adsense-account" content="ca-pub-6216886233683750" />
     <meta name="google-adsense-account" content="ca-pub-6216886233683750" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LPYP5CZFRP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LPYP5CZFRP');
+    </script>
     <title>Performance | Commerce Study Connect</title>
     <link rel="icon" href="data/Images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
@@ -80,16 +89,29 @@
     <script src="auth.js"></script>
     <script>
       const performanceCard = document.querySelector("#performance-card");
-      const attempts = JSON.parse(localStorage.getItem("commerceStudyQuizPerformance") || "[]");
       const escapeHtml = (value) => String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/\"/g, "&quot;");
 
-      if (!attempts.length) {
-        performanceCard.innerHTML = '<h2>No quiz attempts yet</h2><p class="muted">Complete a quiz from the Test page and your results will appear here.</p><a class="btn btn-primary" href="test.html">Take a Test</a>';
-      } else {
+      const renderSignedOut = () => {
+        performanceCard.innerHTML = `
+          <div class="performance-header"><div><span class="eyebrow">Preview</span><h2>Your learning dashboard</h2></div></div>
+          <div class="account-stats">
+            <div><strong>0</strong><span>Your attempts</span></div>
+            <div><strong>--</strong><span>Average score</span></div>
+            <div><strong>--</strong><span>Best score</span></div>
+          </div>
+          <p class="muted">Sign in to view only your own quiz attempts and scores.</p>
+          <button type="button" class="btn btn-primary auth-trigger" data-auth-mode="signin">Sign In to View Performance</button>`;
+      };
+
+      const renderAttempts = (attempts) => {
+        if (!attempts.length) {
+          performanceCard.innerHTML = '<h2>No quiz attempts yet</h2><p class="muted">Complete a quiz from the Test page and your results will appear here.</p><a class="btn btn-primary" href="test.html">Take a Test</a>';
+          return;
+        }
         const average = Math.round(attempts.reduce((total, attempt) => total + Number(attempt.percentage || 0), 0) / attempts.length);
         performanceCard.innerHTML = `
           <div class="performance-header">
@@ -109,14 +131,41 @@
               <thead><tr><th>Quiz</th><th>Score</th><th>Percentage</th><th>Date</th></tr></thead>
               <tbody>${attempts.map((attempt) => `
                 <tr>
-                  <td>${escapeHtml(attempt.subjectName || "Quiz")}</td>
-                  <td>${attempt.correct}/${attempt.totalQuestions}</td>
+                  <td>${escapeHtml(attempt.subject_name || "Quiz")}</td>
+                  <td>${attempt.correct_answers}/${attempt.total_questions}</td>
                   <td>${attempt.percentage}%</td>
-                  <td>${new Date(attempt.date).toLocaleDateString()}</td>
+                  <td>${new Date(attempt.attempted_at).toLocaleDateString()}</td>
                 </tr>`).join("")}</tbody>
             </table>
           </div>`;
-      }
+      };
+
+      const loadPerformance = async (session) => {
+        if (!session?.user || !window.studySupabaseClient) {
+          renderSignedOut();
+          return;
+        }
+        performanceCard.innerHTML = '<p class="muted">Loading your performance...</p>';
+        const { data, error } = await window.studySupabaseClient
+          .from("quiz_attempts")
+          .select("subject_name, correct_answers, total_questions, percentage, attempted_at")
+          .eq("user_id", session.user.id)
+          .order("attempted_at", { ascending: false });
+        if (error) {
+          performanceCard.innerHTML = `<h2>Performance is not ready yet</h2><p class="muted">${escapeHtml(error.message)}</p><p class="muted">Run the latest Supabase schema in the project configured for this website, then refresh.</p>`;
+          return;
+        }
+        renderAttempts(data || []);
+      };
+
+      window.studySupabaseClient?.auth.getSession().then(({ data }) => loadPerformance(data.session));
+      document.addEventListener("study-auth-state", (event) => loadPerformance(event.detail.session));
+      document.addEventListener("click", (event) => {
+        if (event.target.closest("#performance-card .auth-trigger")) {
+          event.preventDefault();
+          document.querySelector(".site-header .auth-trigger")?.click();
+        }
+      });
     </script>
   </body>
 </html>
