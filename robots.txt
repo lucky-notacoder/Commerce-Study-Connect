@@ -5,3 +5,5 @@ Disallow: /profile.html
 Disallow: /performance.html
 Disallow: /supabase-config.js
 Disallow: /supabase-schema.sql
+
+Sitemap: https://commercestudyconnect.in/sitemap.xml
