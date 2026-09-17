@@ -1,4 +1,4 @@
-(function () {
+(() => {
   const courseLevels = window.courseCatalog || [];
   const subjectChapters = window.subjectChapters || {};
   const chapterDetails = window.chapterDetails || {};

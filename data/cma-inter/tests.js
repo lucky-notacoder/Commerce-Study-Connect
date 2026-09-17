@@ -3578,8 +3578,6 @@ window.cmaInterTests['cma-intermediate-business-laws-and-ethics'] = { "Business 
 		};
 	});
 
-    console.log('Loaded', window.cmaInterTests['cma-intermediate-business-laws-and-ethics']["Business Laws and Ethics"].length, 'Business Laws and Ethics MCQs (inlined)');
-
     // Inlined Financial Accounting MCQs (from provided Acc.json)
     var rawAcc = [
  {
@@ -3985,8 +3983,6 @@ window.cmaInterTests['cma-intermediate-business-laws-and-ethics'] = { "Business 
             explanation: ''
         };
     }) };
-
-    console.log('Loaded', window.cmaInterTests['cma-intermediate-financial-accounting']["Financial Accounting"].length, 'Financial Accounting MCQs (inlined)');
 
 })();
 

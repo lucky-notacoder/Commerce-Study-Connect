@@ -1,6 +1,6 @@
 // This file aggregates chapter lists from separate data files.
 // Place CA and CMA chapter files in the data/ca-foundation and data/cma-foundation folders.
-(function () {
+(() => {
   const getChapterName = (chapter) =>
     typeof chapter === "string" ? chapter : chapter?.name || "";
 
@@ -13,7 +13,7 @@
     chapters.some(
       (chapter) =>
         getChapterName(chapter) === chapterName ||
-        getChapterUnits(chapter).includes(chapterName)
+        getChapterUnits(chapter).includes(chapterName),
     );
 
   const chapterLists = Object.assign(
@@ -23,7 +23,7 @@
     window.caInterChapters || {},
     window.cmaInterChapters || {},
     window.caFinalChapters || {},
-    window.cmaFinalChapters || {}
+    window.cmaFinalChapters || {},
   );
   const chapterDetails = Object.assign(
     {},
@@ -32,7 +32,7 @@
     window.caInterChapterDetails || {},
     window.cmaInterChapterDetails || {},
     window.caFinalChapterDetails || {},
-    window.cmaFinalChapterDetails || {}
+    window.cmaFinalChapterDetails || {},
   );
 
   window.subjectChapters = Object.keys(chapterDetails).reduce(
@@ -43,12 +43,12 @@
       subjects[subjectId] = [
         ...listedChapters,
         ...detailChapters.filter(
-          (chapterName) => !hasChapterEntry(listedChapters, chapterName)
+          (chapterName) => !hasChapterEntry(listedChapters, chapterName),
         ),
       ];
 
       return subjects;
     },
-    chapterLists
+    chapterLists,
   );
 })();

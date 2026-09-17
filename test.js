@@ -1,4 +1,4 @@
-(function () {
+(() => {
   const courseCatalog = window.courseCatalog || [];
   const testData = window.testData || {};
   const subjectList = document.getElementById("test-subject-list");
@@ -36,7 +36,7 @@
           <a class="btn btn-outline" href="quiz.html?subject=${encodeURIComponent(subjectId)}&paper=${set}">
             Model Paper - Set ${set}
           </a>
-        `
+        `,
       )
       .join("");
 
@@ -104,7 +104,8 @@
     }
 
     if (!courseCatalog.length) {
-      moduleList.innerHTML = '<p class="muted">No test modules are available yet.</p>';
+      moduleList.innerHTML =
+        '<p class="muted">No test modules are available yet.</p>';
       return;
     }
 
@@ -163,8 +164,7 @@
     const moduleLevelButton = event.target.closest("[data-module-level-id]");
     if (moduleLevelButton) {
       const levelId = moduleLevelButton.dataset.moduleLevelId;
-      expandedModuleLevelId =
-        expandedModuleLevelId === levelId ? "" : levelId;
+      expandedModuleLevelId = expandedModuleLevelId === levelId ? "" : levelId;
       render();
     }
   });

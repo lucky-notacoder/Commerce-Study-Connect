@@ -1,4 +1,4 @@
-(function () {
+(() => {
   const testData = window.testData || {};
   const courseCatalog = window.courseCatalog || [];
   const quizContent = document.getElementById("quiz-content");
@@ -40,12 +40,15 @@
     const user = data.session?.user;
     if (!user) return;
 
-    await client.from("student_progress").upsert({
-      user_id: user.id,
-      course_name: attempt.subjectName,
-      quiz_score: attempt.percentage,
-      updated_at: new Date().toISOString()
-    }, { onConflict: "user_id" });
+    await client.from("student_progress").upsert(
+      {
+        user_id: user.id,
+        course_name: attempt.subjectName,
+        quiz_score: attempt.percentage,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id" },
+    );
 
     await client.from("quiz_attempts").insert({
       user_id: user.id,
@@ -53,7 +56,7 @@
       correct_answers: attempt.correct,
       total_questions: attempt.totalQuestions,
       percentage: attempt.percentage,
-      attempted_at: attempt.date
+      attempted_at: attempt.date,
     });
   };
 
@@ -86,7 +89,9 @@
     if (!user) return [];
     const { data, error } = await client
       .from("quiz_attempts")
-      .select("subject_name, correct_answers, total_questions, percentage, attempted_at")
+      .select(
+        "subject_name, correct_answers, total_questions, percentage, attempted_at",
+      )
       .eq("user_id", user.id)
       .order("attempted_at", { ascending: false });
     if (error) return [];
@@ -95,7 +100,7 @@
       correct: attempt.correct_answers,
       totalQuestions: attempt.total_questions,
       percentage: attempt.percentage,
-      date: attempt.attempted_at
+      date: attempt.attempted_at,
     }));
   };
 
@@ -116,7 +121,9 @@
           <button type="button" class="btn btn-secondary" id="back-to-quiz-btn">Back to Quiz</button>
         </div>
         <p class="muted">Only your signed-in account's quiz attempts appear here.</p>
-        ${attempts.length ? `
+        ${
+          attempts.length
+            ? `
           <div class="performance-table-wrapper">
             <table class="performance-table">
               <thead>
@@ -137,18 +144,20 @@
                         <td>${attempt.percentage}%</td>
                         <td>${escapeHtml(formatDate(attempt.date))}</td>
                       </tr>
-                    `
+                    `,
                   )
                   .join("")}
               </tbody>
             </table>
           </div>
-        ` : `
+        `
+            : `
           <div class="performance-no-data">
             <p>No quiz attempts found for this account yet.</p>
             <p class="performance-details">Sign in and complete a quiz to track your personal performance here.</p>
           </div>
-        `}
+        `
+        }
       </div>
     `;
 
@@ -193,14 +202,27 @@
 
     const sectionBPapers = window.sectionBData?.[subjectId] || {};
     const selectedPaper = sectionBPapers[paperNumber] || {};
-    const questionBank = Object.entries(selectedPaper)
-      .filter(([questionNumber, question]) =>
-        /^\d+$/.test(questionNumber) && question?.a && question?.b
-      )
-      .map(([, question]) => question);
+
+    const flattenSectionBQuestions = (value, questions = []) => {
+      if (!value || typeof value !== "object") return questions;
+
+      Object.entries(value).forEach(([key, item]) => {
+        if (item && typeof item === "object" && !Array.isArray(item)) {
+          if (/^\d+$/.test(key) && (item.a || item.b)) {
+            questions.push(item);
+            return;
+          }
+          flattenSectionBQuestions(item, questions);
+        }
+      });
+
+      return questions;
+    };
+
+    const questionBank = flattenSectionBQuestions(selectedPaper);
 
     const questions = shuffle(questionBank.slice())
-      .slice(0, 8)
+      .slice(0, 7)
       .map((question, index) => ({ number: index + 2, ...question }));
     window._currentSectionBQuestions = questions;
 
@@ -212,7 +234,9 @@
           <p>Attempt any five questions. Each question has Part (a) and Part (b).</p>
         </div>
         <div class="section-b-questions">
-          ${questions.map((question) => `
+          ${questions
+            .map(
+              (question) => `
             <article class="section-b-question">
               <h3>Question ${question.number}</h3>
               <div class="section-b-part">
@@ -230,7 +254,9 @@
                 <input id="section-b-${question.number}-b-file" name="section-b-${question.number}-b-file" type="file" accept=".pdf,.doc,.docx,image/*" />
               </div>
             </article>
-          `).join("")}
+          `,
+            )
+            .join("")}
         </div>
       </section>`;
   };
@@ -264,12 +290,15 @@
     if (modelPaperNumber) {
       renderQuestionsObj = {
         [`Model Question Paper - Set ${modelPaperNumber}`]: shuffle(
-          allQuestionsArray.slice()
+          allQuestionsArray.slice(),
         ).slice(0, modelPaperSize),
       };
       quizLabel += ` - Model Question Paper Set ${modelPaperNumber}`;
     } else if (totalAvailable > modelPaperSize) {
-      const sampled = shuffle(allQuestionsArray.slice()).slice(0, modelPaperSize);
+      const sampled = shuffle(allQuestionsArray.slice()).slice(
+        0,
+        modelPaperSize,
+      );
       renderQuestionsObj = { "Random 15 MCQs": sampled };
     }
 
@@ -282,7 +311,8 @@
       <h1>${escapeHtml(quizLabel)}</h1>
     `;
 
-    const totalQuestions = Object.values(window._currentQuizQuestions).flat().length;
+    const totalQuestions = Object.values(window._currentQuizQuestions).flat()
+      .length;
     // global counter to show sequential numbers (1..N) irrespective of original question IDs
     let qCounter = 0;
     quizContent.innerHTML = `
@@ -302,12 +332,11 @@
               <h2 class="chapter-heading">${escapeHtml(chapterName)}</h2>
               <div class="questions-container">
                 ${chapterQuestions
-                  .map(
-                    (q, questionIndex) => {
-                      const displayNumber = ++qCounter;
-                      const inputName = `q-${chapterIndex}-${questionIndex}`;
+                  .map((q, questionIndex) => {
+                    const displayNumber = ++qCounter;
+                    const inputName = `q-${chapterIndex}-${questionIndex}`;
 
-                      return `
+                    return `
                         <article class="question-card">
                           <div class="question-header">
                             <span class="question-number">Q${displayNumber}</span>
@@ -321,18 +350,17 @@
                                     <input type="radio" name="${inputName}" value="${option[0]}" class="question-input" />
                                     <span>${escapeHtml(option)}</span>
                                   </label>
-                                `
+                                `,
                               )
                               .join("")}
                           </div>
                         </article>
                       `;
-                    }
-                  )
+                  })
                   .join("")}
               </div>
             </section>
-          `
+          `,
         )
         .join("")}
       </section>
@@ -368,13 +396,17 @@
         questionNumber++;
         const inputName = `q-${chapterIndex}-${questionIndex}`;
         const selectedOption = document.querySelector(
-          `input[name="${inputName}"]:checked`
+          `input[name="${inputName}"]:checked`,
         );
         const attemptedAnswer = selectedOption?.value || "";
         let correctOption = "";
         let correctAnswer = "";
 
-        if (q.answerCode !== undefined && q.answerCode !== null && q.answerCode !== "") {
+        if (
+          q.answerCode !== undefined &&
+          q.answerCode !== null &&
+          q.answerCode !== ""
+        ) {
           const answerCode = Number(q.answerCode);
           const optionIndex = Number.isInteger(answerCode)
             ? typeof q.answerCode === "string"
@@ -386,10 +418,12 @@
         } else {
           correctAnswer = q.correctAnswer || "";
           correctOption =
-            q.options.find((option) => option.startsWith(correctAnswer)) || correctAnswer;
+            q.options.find((option) => option.startsWith(correctAnswer)) ||
+            correctAnswer;
         }
 
-        const isCorrect = Boolean(attemptedAnswer) && attemptedAnswer === correctAnswer;
+        const isCorrect =
+          Boolean(attemptedAnswer) && attemptedAnswer === correctAnswer;
 
         if (isCorrect) {
           correct++;
@@ -401,7 +435,8 @@
           attemptedAnswer,
           correctAnswer,
           attemptedOption: attemptedAnswer
-            ? q.options.find((option) => option.startsWith(attemptedAnswer)) || attemptedAnswer
+            ? q.options.find((option) => option.startsWith(attemptedAnswer)) ||
+              attemptedAnswer
             : "Not attempted",
           correctOption,
           marks: isCorrect ? 2 : 0,
@@ -410,8 +445,7 @@
     });
 
     const percentage = Math.round((correct / totalQuestions) * 100);
-    const subjectName =
-      window._currentQuizLabel || getSubjectName(subjectId);
+    const subjectName = window._currentQuizLabel || getSubjectName(subjectId);
     const attempt = {
       subjectName,
       correct,
@@ -425,24 +459,32 @@
     const sectionBReview = (window._currentSectionBQuestions || [])
       .map((question) => {
         const getResponse = (part) => {
-          const answer = document.querySelector(
-            `textarea[name="section-b-${question.number}-${part}"]`
-          )?.value.trim();
+          const answer = document
+            .querySelector(
+              `textarea[name="section-b-${question.number}-${part}"]`,
+            )
+            ?.value.trim();
           const file = document.querySelector(
-            `input[name="section-b-${question.number}-${part}-file"]`
+            `input[name="section-b-${question.number}-${part}-file"]`,
           )?.files?.[0];
-          return { answer: answer || "Not attempted", fileName: file?.name || "" };
+          return {
+            answer: answer || "Not attempted",
+            fileName: file?.name || "",
+          };
         };
 
         return { question, a: getResponse("a"), b: getResponse("b") };
       })
-      .map(({ question, a, b }) => `
+      .map(
+        ({ question, a, b }) => `
         <article class="answer-review-card section-b-review-card">
           <h3>Question ${question.number}</h3>
-          ${["a", "b"].map((part) => {
-            const response = part === "a" ? a : b;
-            const modelAnswer = question.answers?.[part] || "Model answer will be added soon.";
-            return `
+          ${["a", "b"]
+            .map((part) => {
+              const response = part === "a" ? a : b;
+              const modelAnswer =
+                question.answers?.[part] || "Model answer will be added soon.";
+              return `
               <div class="descriptive-review-part">
                 <div class="review-part-heading">
                   <strong>(${part})</strong>
@@ -455,8 +497,10 @@
                 <p><strong>Model answer:</strong></p>
                 <div class="model-answer">${escapeHtml(modelAnswer)}</div>
               </div>`;
-          }).join("")}
-        </article>`)
+            })
+            .join("")}
+        </article>`,
+      )
       .join("");
 
     // Show inline result with actions so user can take another random test
@@ -473,7 +517,9 @@
           <h3>Section A: MCQ Answer Review</h3>
           <p class="muted">Marks shown as correct = 2 and incorrect/unattempted = 0.</p>
           <div class="answer-review-list">
-            ${mcqReview.map((item) => `
+            ${mcqReview
+              .map(
+                (item) => `
               <article class="answer-review-card ${item.marks ? "is-correct" : "is-incorrect"}">
                 <div class="review-card-heading">
                   <strong>Question ${item.number}</strong>
@@ -482,15 +528,21 @@
                 <p>${escapeHtml(item.question)}</p>
                 <p><strong>Your answer:</strong> ${escapeHtml(item.attemptedOption)}</p>
                 <p><strong>Correct answer:</strong> ${escapeHtml(item.correctOption)}</p>
-              </article>`).join("")}
+              </article>`,
+              )
+              .join("")}
           </div>
         </section>
-        ${sectionBReview ? `
+        ${
+          sectionBReview
+            ? `
           <section class="answer-review-section">
             <h3>Section B: Descriptive Answer Review</h3>
             <p class="muted">Marks will appear here once AI rubric evaluation is enabled.</p>
             <div class="answer-review-list">${sectionBReview}</div>
-          </section>` : ""}
+          </section>`
+            : ""
+        }
         <div class="quiz-result-actions">
           <button type="button" class="btn btn-primary" id="next-test-btn">Next Test</button>
           <button type="button" class="btn btn-secondary" id="view-performance-btn">View Performance</button>
@@ -519,7 +571,10 @@
       renderQuiz();
     }
 
-    if (target instanceof HTMLElement && target.matches("#view-performance-btn")) {
+    if (
+      target instanceof HTMLElement &&
+      target.matches("#view-performance-btn")
+    ) {
       renderPerformance();
     }
   });
