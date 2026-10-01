@@ -4,11 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <meta
+      name="description"
+      content="The page you requested could not be found. Explore Commerce Study Connect courses, tests, and study resources to continue learning."
+    />
     <title>Page Not Found | Commerce Study Connect</title>
     <link rel="icon" href="data/Images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="mobile-nav.js" defer></script>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">Commerce Study Connect</a>
@@ -21,18 +27,61 @@
         </nav>
       </div>
     </header>
-    <main>
+
+    <main id="main-content">
       <section class="hero">
         <div class="container hero-copy">
-          <span class="eyebrow">404 error</span>
-          <h1>We could not find that page</h1>
-          <p>The link may be outdated or the page may have moved.</p>
+          <p class="eyebrow">404 error</p>
+          <h1>Page not found</h1>
+          <p>
+            The page you were looking for may have moved, expired, or never
+            existed. You can return to the homepage or browse our courses,
+            practice tests, and learning resources.
+          </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="index.html">Go to homepage</a>
-            <a class="btn btn-outline" href="mailto:hello@commercestudyconnect.in?subject=Broken%20link%20report">Report broken link</a>
+            <a
+              class="btn btn-outline"
+              href="mailto:hello@commercestudyconnect.in?subject=Broken%20link%20report"
+              >Report broken link</a
+            >
           </div>
         </div>
       </section>
+
+      <section class="container" aria-labelledby="helpful-links-title">
+        <h2 id="helpful-links-title">Helpful links</h2>
+        <div class="resource-grid">
+          <a href="courses.html">Explore courses</a>
+          <a href="test.html">Take a practice test</a>
+          <a href="pricing.html">View pricing</a>
+          <a href="contact.html">Contact support</a>
+        </div>
+      </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand" href="index.html">Commerce Study Connect</a>
+          <p>Explore new skills. Reset your learning. Unlock your potential.</p>
+        </div>
+        <div>
+          <h2>Explore</h2>
+          <a href="index.html">Home</a>
+          <a href="courses.html">Courses</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="test.html">Test</a>
+          <a href="contact.html">Contact</a>
+          <a href="about.html">About</a>
+          <a href="editorial-policy.html">Editorial policy</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </div>
+      </div>
+      <p class="footer-note">
+        © 2026 Your Learning Platform. All Rights Reserved.
+      </p>
+    </footer>
   </body>
 </html>

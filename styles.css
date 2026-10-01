@@ -35,6 +35,22 @@ a {
   text-decoration: none;
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.65rem 0.9rem;
+  border-radius: 0.5rem;
+  background: var(--text);
+  color: #fff;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 .container {
   width: min(1440px, calc(100% - clamp(2rem, 7vw, 7rem)));
   margin: 0 auto;
@@ -77,6 +93,10 @@ a {
   padding-bottom: 16px;
   margin-bottom: -16px;
   scrollbar-width: none;
+}
+
+.mobile-nav-toggle {
+  display: none;
 }
 
 .main-nav::-webkit-scrollbar {
@@ -238,7 +258,7 @@ a {
 }
 
 .hero-copy h1 {
-  font-size: clamp(2.8rem, 4vw, 4.5rem);
+  font-size: 3.6rem;
   margin: 0;
   line-height: 1.02;
 }
@@ -342,7 +362,7 @@ a {
 
 .section-heading h2 {
   margin-bottom: 1rem;
-  font-size: clamp(2rem, 2.5vw, 3rem);
+  font-size: 2.25rem;
 }
 
 .section-heading p {
@@ -429,8 +449,37 @@ a {
 .pricing-card {
   background: var(--surface);
   border-radius: var(--radius);
-  padding: 2.2rem;
+  padding: 1.75rem;
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.legal-content {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.legal-content h2 {
+  margin-top: 2rem;
+  font-size: 1.35rem;
+}
+
+.legal-content h2:first-of-type {
+  margin-top: 1.5rem;
+}
+
+.legal-content ul {
+  padding-left: 1.35rem;
+}
+
+.legal-content li + li {
+  margin-top: 0.55rem;
+}
+
+.legal-content a {
+  color: var(--primary-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 .feature-card.is-selected {
@@ -443,6 +492,8 @@ a {
 .step-card h3,
 .pricing-card h3 {
   margin-top: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
 }
 
 .course-meta {
@@ -568,7 +619,7 @@ a {
 .chapter-reading-header h1 {
   max-width: 850px;
   margin: 0;
-  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-size: 3.5rem;
   line-height: 1.05;
 }
 
@@ -723,7 +774,7 @@ body.auth-open {
 
 .auth-intro h2 {
   margin: 0.45rem 0 0.35rem;
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: 2.1rem;
   line-height: 1.1;
 }
 
@@ -904,6 +955,13 @@ body.auth-open {
 
 .pricing-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.affiliate-links-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  
 }
 
 .pricing-card {
@@ -1621,10 +1679,28 @@ body.auth-open {
   }
 
   .hero-panel,
-  .cards-grid,
-  .pricing-grid,
   .subscribe-panel {
-    padding: 1.75rem;
+    padding: 1.5rem;
+  }
+
+  .cards-grid,
+  .pricing-grid {
+    padding: 0;
+  }
+
+  .feature-card,
+  .card,
+  .step-card,
+  .pricing-card {
+    padding: 1.5rem;
+  }
+
+  .hero-copy h1 {
+    font-size: 3rem;
+  }
+
+  .chapter-reading-header h1 {
+    font-size: 2.75rem;
   }
 }
 
@@ -1634,26 +1710,77 @@ body.auth-open {
   }
 
   .header-inner {
-    overflow-x: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
     padding: 1rem 0;
-    scrollbar-width: none;
-  }
-
-  .header-inner::-webkit-scrollbar {
-    display: none;
-  }
-
-  .main-nav {
-    gap: 0.75rem;
-  }
-
-  .main-nav a {
-    white-space: nowrap;
   }
 
   .brand {
     font-size: 1rem;
     white-space: nowrap;
+  }
+
+  .mobile-nav-toggle {
+    display: inline-flex;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 40px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--text);
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .mobile-nav-toggle span {
+    width: 18px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  .mobile-nav-toggle:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 3px;
+  }
+
+  .site-header.has-mobile-nav .main-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    padding: 0.75rem 1rem 1rem;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: visible;
+    background: var(--surface);
+    box-shadow: 0 12px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  .site-header.has-mobile-nav .main-nav.is-open {
+    display: flex;
+  }
+
+  .main-nav a {
+    justify-content: flex-start;
+    white-space: nowrap;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.7rem 1rem;
+  }
+
+  .header-actions {
+    display: none;
   }
 
   .header-actions .btn {
@@ -1671,7 +1798,67 @@ body.auth-open {
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.4rem, 8vw, 3rem);
+    font-size: 2.25rem;
+    line-height: 1.08;
+  }
+
+  .section-heading {
+    margin-bottom: 2rem;
+  }
+
+  .section-heading h2 {
+    font-size: 1.65rem;
+    line-height: 1.2;
+  }
+
+  .chapter-reading-header h1 {
+    font-size: 2.1rem;
+  }
+
+  .auth-intro h2 {
+    font-size: 1.65rem;
+  }
+
+  .feature-card,
+  .card,
+  .step-card,
+  .pricing-card,
+  .hero-panel,
+  .subscribe-panel {
+    padding: 1.125rem;
+    border-radius: 16px;
+  }
+
+  .feature-card h3,
+  .card h3,
+  .step-card h3,
+  .pricing-card h3 {
+    font-size: 1.125rem;
+  }
+
+  .stat-card {
+    gap: 0.75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+  }
+
+  .stats-grid {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .stat-box {
+    padding: 0.75rem;
+    border-radius: 14px;
+  }
+
+  .stat-box strong {
+    font-size: 1.25rem;
+  }
+
+  .price {
+    font-size: 1.75rem;
   }
 
   .hero-copy p {
@@ -1680,6 +1867,152 @@ body.auth-open {
 
   .subscribe-panel {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-copy h1 {
+    font-size: 2rem;
+  }
+}
+
+.hero-copy h1 {
+  font-size: 4rem;
+}
+
+.hero-copy p {
+  margin: 1.5rem 0 2rem;
+}
+
+.hero-panel {
+  width: min(100%, 560px);
+  padding: 1.75rem;
+}
+
+.stat-card {
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat-card h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.stats-grid {
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat-box {
+  padding: 1.125rem;
+}
+
+.stat-box strong {
+  font-size: 1.75rem;
+}
+
+.dashboard-card {
+  padding: 1.75rem;
+}
+
+.section-heading h2 {
+  font-size: 2.5rem;
+}
+
+.feature-grid,
+.cards-grid,
+.steps-grid,
+.pricing-grid {
+  gap: 1.5rem;
+}
+
+.feature-card,
+.card,
+.step-card,
+.pricing-card {
+  padding: 2rem;
+}
+
+.feature-card h3,
+.card h3,
+.step-card h3,
+.pricing-card h3 {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 1120px) {
+  .hero-copy h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .hero-copy h1 {
+    font-size: 3rem;
+  }
+
+  .hero-panel,
+  .subscribe-panel,
+  .feature-card,
+  .card,
+  .step-card,
+  .pricing-card {
+    padding: 1.75rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-copy h1 {
+    font-size: 2.25rem;
+    line-height: 1.08;
+  }
+
+  .hero-copy p {
+    margin: 1.25rem 0 1rem;
+  }
+
+  .section-heading h2 {
+    font-size: 1.8rem;
+  }
+
+  .feature-card,
+  .card,
+  .step-card,
+  .pricing-card,
+  .hero-panel,
+  .subscribe-panel {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  .feature-card h3,
+  .card h3,
+  .step-card h3,
+  .pricing-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .stat-card {
+    padding: 1.125rem;
+  }
+
+  .stat-card h2 {
+    font-size: 1.25rem;
+  }
+
+  .stat-box strong {
+    font-size: 1.4rem;
+  }
+
+  .dashboard-card {
     padding: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-copy h1 {
+    font-size: 2rem;
   }
 }

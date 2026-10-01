@@ -26,5 +26,11 @@ window.caFinalCourses = {
         "Strategic financial management, project finance, derivatives, and corporate restructuring.",
       satisfaction: 93,
     },
+    {
+      name: "Indirect Tax Laws",
+      description:
+        "Master GST procedures, customs duty, valuation, and foreign trade policy for indirect tax practice.",
+      satisfaction: 92,
+    },
   ],
 };

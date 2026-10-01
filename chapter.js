@@ -28,7 +28,7 @@
         ...subject,
         id: `${toSlug(level.level)}-${toSlug(subject.name)}`,
         level: level.level,
-      }))
+      })),
     );
 
   const getChapterInfo = (subjectId, chapterName) => {
@@ -203,9 +203,7 @@
               <h2>Important Topics</h2>
               <ul class="chapter-reading-list">
                 ${topics
-                  .map((topic) =>
-                    renderTopic(topic, info, topics.length)
-                  )
+                  .map((topic) => renderTopic(topic, info, topics.length))
                   .join("")}
               </ul>
             </section>

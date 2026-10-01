@@ -1,8 +1,9 @@
 (() => {
   const supabaseConfig = window.SUPABASE_CONFIG || {};
-  const supabaseClient = window.supabase && supabaseConfig.url && supabaseConfig.anonKey
-    ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
-    : null;
+  const supabaseClient =
+    window.supabase && supabaseConfig.url && supabaseConfig.anonKey
+      ? window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey)
+      : null;
   window.studySupabaseClient = supabaseClient;
 
   const modalMarkup = `
@@ -22,12 +23,12 @@
         <form class="auth-form" id="signin-form">
           <div class="auth-field">
             <label for="signin-email">Email</label>
-            <input type="text" id="signin-email" name="identity" placeholder="you@example.com" autocomplete="username" required />
+            <input type="email" id="signin-email" name="identity" placeholder="you@example.com" aria-label="Email" autocomplete="username" required />
           </div>
           <div class="auth-field">
             <label for="signin-password">Password or Code</label>
             <div class="auth-password-field">
-              <input type="password" id="signin-password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+              <input type="password" id="signin-password" name="password" placeholder="Enter your password" aria-label="Password or Code" autocomplete="current-password" required />
               <button type="button" class="password-toggle" aria-label="Show password" data-password-toggle="signin-password">Show</button>
             </div>
           </div>
@@ -37,16 +38,16 @@
         <form class="auth-form" id="signup-form" hidden>
           <div class="auth-field">
             <label for="signup-name">Full Name</label>
-            <input type="text" id="signup-name" name="name" placeholder="Enter your name" autocomplete="name" required />
+            <input type="text" id="signup-name" name="name" placeholder="Enter your name" aria-label="Full Name" autocomplete="name" required />
           </div>
           <div class="auth-field">
             <label for="signup-email">Email</label>
-            <input type="text" id="signup-email" name="identity" placeholder="Create your unique ID or email" autocomplete="username" required />
+            <input type="email" id="signup-email" name="identity" placeholder="Create your unique ID or email" aria-label="Email" autocomplete="username" required />
           </div>
           <div class="auth-field">
             <label for="signup-password">Password or Code</label>
             <div class="auth-password-field">
-              <input type="password" id="signup-password" name="password" placeholder="Create a password" autocomplete="new-password" minlength="6" required />
+              <input type="password" id="signup-password" name="password" placeholder="Create a password" aria-label="Password or Code" autocomplete="new-password" minlength="6" required />
               <button type="button" class="password-toggle" aria-label="Show password" data-password-toggle="signup-password">Show</button>
             </div>
           </div>
@@ -61,7 +62,7 @@
     const socialIconAssets = {
       whatsapp: "https://cdn.simpleicons.org/whatsapp/25D366",
       telegram: "https://cdn.simpleicons.org/telegram/26A5E4",
-      instagram: "https://cdn.simpleicons.org/instagram/E4405F"
+      instagram: "https://cdn.simpleicons.org/instagram/E4405F",
     };
 
     document.querySelectorAll(".footer-socials a").forEach((link) => {
@@ -72,7 +73,7 @@
       if (!link.querySelector("img")) {
         link.insertAdjacentHTML(
           "afterbegin",
-          `<img src="${iconSource}" alt="" aria-hidden="true" />`
+          `<img src="${iconSource}" alt="" aria-hidden="true" />`,
         );
       }
     });
@@ -92,16 +93,19 @@
       wrapper.className = "account-menu";
       trigger.parentNode.insertBefore(wrapper, trigger);
       wrapper.appendChild(trigger);
-      wrapper.insertAdjacentHTML("beforeend", `
+      wrapper.insertAdjacentHTML(
+        "beforeend",
+        `
         <div class="account-dropdown" hidden>
           <a href="profile.html" data-account-option="profile">My Profile</a>
           <a href="performance.html" data-account-option="performance">Performance</a>
           <button type="button" data-account-signout>Sign Out</button>
-        </div>`);
+        </div>`,
+      );
       return {
         trigger,
         wrapper,
-        dropdown: wrapper.querySelector(".account-dropdown")
+        dropdown: wrapper.querySelector(".account-dropdown"),
       };
     });
 
@@ -113,9 +117,11 @@
         trigger.setAttribute("aria-expanded", "false");
         dropdown.hidden = true;
       });
-      document.dispatchEvent(new CustomEvent("study-auth-state", {
-        detail: { session }
-      }));
+      document.dispatchEvent(
+        new CustomEvent("study-auth-state", {
+          detail: { session },
+        }),
+      );
     };
 
     const closeAccountMenus = () => {
@@ -153,7 +159,9 @@
       setMode(mode || "signin");
       modal.hidden = false;
       document.body.classList.add("auth-open");
-      window.requestAnimationFrame(() => dialog.querySelector("input")?.focus());
+      window.requestAnimationFrame(() =>
+        dialog.querySelector("input")?.focus(),
+      );
     };
 
     accountMenus.forEach(({ trigger, wrapper, dropdown }) => {
@@ -192,11 +200,16 @@
       if (tab) setMode(tab.dataset.authTab);
       const passwordToggle = event.target.closest("[data-password-toggle]");
       if (passwordToggle) {
-        const input = document.getElementById(passwordToggle.dataset.passwordToggle);
+        const input = document.getElementById(
+          passwordToggle.dataset.passwordToggle,
+        );
         const isPassword = input.type === "password";
         input.type = isPassword ? "text" : "password";
         passwordToggle.textContent = isPassword ? "Hide" : "Show";
-        passwordToggle.setAttribute("aria-label", `${isPassword ? "Hide" : "Show"} password`);
+        passwordToggle.setAttribute(
+          "aria-label",
+          `${isPassword ? "Hide" : "Show"} password`,
+        );
       }
     });
     forms.forEach((form) => {
@@ -209,20 +222,29 @@
         const password = String(formData.get("password") || "");
 
         if (!supabaseClient) {
-          message.textContent = "Supabase is not configured yet. Add your project URL and publishable key to supabase-config.js.";
+          message.textContent =
+            "Supabase is not configured yet. Add your project URL and publishable key to supabase-config.js.";
           return;
         }
 
         submitButton.disabled = true;
         message.textContent = "Connecting...";
 
-        const result = form.id === "signup-form"
-          ? await supabaseClient.auth.signUp({
-              email: identity,
-              password,
-              options: { data: { full_name: String(formData.get("name") || "").trim() } }
-            })
-          : await supabaseClient.auth.signInWithPassword({ email: identity, password });
+        const result =
+          form.id === "signup-form"
+            ? await supabaseClient.auth.signUp({
+                email: identity,
+                password,
+                options: {
+                  data: {
+                    full_name: String(formData.get("name") || "").trim(),
+                  },
+                },
+              })
+            : await supabaseClient.auth.signInWithPassword({
+                email: identity,
+                password,
+              });
 
         submitButton.disabled = false;
         if (result.error) {
@@ -236,12 +258,17 @@
           return;
         }
 
-        message.textContent = "Account created. Check your email to confirm your account.";
+        message.textContent =
+          "Account created. Check your email to confirm your account.";
       });
     });
     if (supabaseClient) {
-      supabaseClient.auth.getSession().then(({ data }) => updateAccountUI(data.session));
-      supabaseClient.auth.onAuthStateChange((_event, session) => updateAccountUI(session));
+      supabaseClient.auth
+        .getSession()
+        .then(({ data }) => updateAccountUI(data.session));
+      supabaseClient.auth.onAuthStateChange((_event, session) =>
+        updateAccountUI(session),
+      );
     } else {
       updateAccountUI(null);
     }
@@ -251,6 +278,7 @@
     });
   };
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", init);
   else init();
 })();
