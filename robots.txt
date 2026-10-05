@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
 
-Disallow: /profile.html
-Disallow: /performance.html
 Disallow: /supabase-config.js
 Disallow: /supabase-schema.sql
 
