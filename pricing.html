@@ -149,8 +149,8 @@
                 <li>Community contribution</li>
                 <li>One-time suggested amount</li>
               </ul>
-              <a class="btn btn-primary" href="contact.html"
-                >Ask about donating</a
+              <button class="btn btn-primary donation-trigger" type="button" data-plan="Contributor"
+                >Choose Contributor</button
               >
             </div>
             <div class="pricing-card">
@@ -166,8 +166,8 @@
                 <li>Helps improve student tools</li>
                 <li>One-time suggested amount</li>
               </ul>
-              <a class="btn btn-primary" href="https://www.msservices.co.in/products"
-                >Ask about donating</a
+              <button class="btn btn-primary donation-trigger" type="button" data-plan="Patron"
+                >Choose Patron</button
               >
             </div>
           </div>
@@ -243,5 +243,58 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="auth.js"></script>
+    <div class="auth-modal" id="donation-modal" hidden>
+      <div class="auth-backdrop" data-donation-close></div>
+      <section class="auth-dialog donation-dialog" role="dialog" aria-modal="true" aria-labelledby="donation-title" aria-describedby="donation-description">
+        <button class="auth-close" type="button" aria-label="Close donation dialog" data-donation-close>&times;</button>
+        <div class="auth-intro">
+          <span class="auth-kicker">Support the project</span>
+          <h2 id="donation-title">Donate with QR</h2>
+          <p id="donation-description">Scan the QR code to make your voluntary contribution.</p>
+        </div>
+        <p class="donation-selected-plan" id="donation-selected-plan"></p>
+        <img class="donation-qr" src="data/Images/donation-qr.jpeg" alt="Donation QR code" />
+        <p class="auth-privacy">Your contribution is optional and helps keep learning resources available.</p>
+      </section>
+    </div>
+    <script>
+      (() => {
+        const modal = document.querySelector("#donation-modal");
+        const dialog = modal.querySelector(".donation-dialog");
+        const planLabel = modal.querySelector("#donation-selected-plan");
+        const qrImage = modal.querySelector(".donation-qr");
+        const qrByPlan = {
+          Contributor: "data/Images/Contributor%20donation-qr.jpeg",
+          Patron: "data/Images/Patron%20donation-qr.jpeg",
+        };
+        let lastTrigger;
+
+        const close = () => {
+          modal.hidden = true;
+          document.body.classList.remove("auth-open");
+          lastTrigger?.focus();
+        };
+
+        document.querySelectorAll(".donation-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", () => {
+            lastTrigger = trigger;
+            planLabel.textContent = `${trigger.dataset.plan} selected`;
+            qrImage.src = qrByPlan[trigger.dataset.plan];
+            qrImage.alt = `${trigger.dataset.plan} donation QR code`;
+            modal.hidden = false;
+            document.body.classList.add("auth-open");
+            modal.querySelector("[data-donation-close]").focus();
+          });
+        });
+
+        modal.addEventListener("click", (event) => {
+          if (event.target.closest("[data-donation-close]")) close();
+          if (event.target === modal) close();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !modal.hidden) close();
+        });
+      })();
+    </script>
   </body>
 </html>

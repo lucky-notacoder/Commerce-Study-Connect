@@ -743,6 +743,33 @@ body.auth-open {
   display: none;
 }
 
+.donation-dialog {
+  text-align: center;
+}
+
+.donation-dialog .auth-intro {
+  padding-right: 2.5rem;
+  padding-left: 2.5rem;
+}
+
+.donation-selected-plan {
+  margin: 1.25rem 0 0.75rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.donation-qr {
+  display: block;
+  width: min(100%, 300px);
+  max-height: 52vh;
+  object-fit: contain;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: #fff;
+  padding: 0.5rem;
+}
+
 .auth-close {
   position: absolute;
   top: 1rem;
